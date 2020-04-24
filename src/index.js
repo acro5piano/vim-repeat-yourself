@@ -42,7 +42,8 @@ async function importLine(searchWord = '', searchPath = process.cwd()) {
 
 function getSaveTo(searchPath) {
   const fileName = searchPath.replace(/\//g, '__')
-  return path.resolve(`${process.env.HOME}/.vim-repeat-yourself/${fileName}`)
+  const dir = path.resolve(`${process.env.HOME}/.vim-repeat-yourself`)
+  return `${dir}/${fileName}`
 }
 
 async function getList(
@@ -65,6 +66,9 @@ async function getList(
 }
 
 async function make(searchPath = process.cwd()) {
+  const fileName = searchPath.replace(/\//g, '__')
+  const dir = path.resolve(`${process.env.HOME}/.vim-repeat-yourself`)
+  await execa(dir)
   const lines = await getList(searchPath)
   await writeFilePromise(
     getSaveTo(searchPath),
