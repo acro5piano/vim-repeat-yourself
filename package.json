@@ -1,0 +1,17 @@
+{
+  "name": "vim-repeat-yourself",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "repository": "git@github.com:acro5piano/vim-repeat-yourself",
+  "author": "gosho-kazuya <ketsume0211@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "ava"
+  },
+  "devDependencies": {
+    "ava": "^3.7.1",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.1.7",
+    "prettier": "^2.0.5"
+  }
+}
