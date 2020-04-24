@@ -6,11 +6,9 @@ module.exports = plugin => {
   plugin.registerCommand(
     'RepeatYourselfMake',
     async () => {
-      try {
-        await make()
-      } catch (err) {
+      await make().catch(() => {
         console.error(err)
-      }
+      })
     },
     { sync: false },
   )
@@ -20,6 +18,7 @@ module.exports = plugin => {
     async () => {
       try {
         const cword = await plugin.nvim.eval('expand("<cword>")')
+        await plugin.nvim.outWrite(`[RepeatYourself] Searching ${cword} ...\n`)
         const buffer = await plugin.nvim.buffer
         const line = await importLine(cword)
 
@@ -38,13 +37,13 @@ module.exports = plugin => {
     { sync: false },
   )
 
-  plugin.registerAutocmd(
-    'BufEnter',
-    async fileName => {
-      await importLine()
-      // await cachedListJson(process.cwd())
-      // await plugin.nvim.buffer.append('BufEnter for a JS File?')
-    },
-    { sync: false, pattern: '*.{js,jsx,ts,tsx}', eval: 'expand("<afile>")' },
-  )
+  // plugin.registerAutocmd(
+  //   'BufEnter',
+  //   async fileName => {
+  //     await importLine()
+  //     // await cachedListJson(process.cwd())
+  //     // await plugin.nvim.buffer.append('BufEnter for a JS File?')
+  //   },
+  //   { sync: false, pattern: '*.{js,jsx,ts,tsx}', eval: 'expand("<afile>")' },
+  // )
 }
