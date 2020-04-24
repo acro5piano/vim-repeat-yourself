@@ -4,16 +4,6 @@ const { spawn } = require('child_process')
 const util = require('util')
 const execa = require('execa')
 const Aigle = require('aigle')
-const {
-  onEnd,
-  publish,
-  onPush,
-  toPromise,
-  subscribe,
-  map,
-  pipe,
-  fromPromise,
-} = require('wonka')
 
 const writeFilePromise = util.promisify(fs.writeFile)
 const readFilePromise = util.promisify(fs.readFile)

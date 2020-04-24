@@ -9,9 +9,10 @@ const readFilePromise = util.promisify(fs.readFile)
 test('make', async t => {
   const searchPath = path.resolve(__dirname, 'test-project')
   await make(searchPath)
-  const artifact = await readFilePromise(getSaveTo(searchPath))
+  const artifact = await readFilePromise(getSaveTo(searchPath), 'utf8')
 
   t.deepEqual(JSON.parse(artifact), [
+    "import * as React from 'react'",
     "import app from '@react-native-firebase/app'",
     "import { AppRegistry, Text } from 'react-native'",
     "import React from 'react'",
