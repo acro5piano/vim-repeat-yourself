@@ -1,13 +1,13 @@
-const { make, importLine } = require('../../src')
+const { make, importLine, cachedListJson } = require('../../src')
 
 module.exports = plugin => {
-  plugin.setOptions({ dev: false })
+  plugin.setOptions({ dev: true })
 
   plugin.registerCommand(
     'RepeatYourselfMake',
     async () => {
       try {
-        await plugin.nvim.outWrite('Dayman (ah-ah-ah) \n')
+        await make()
       } catch (err) {
         console.error(err)
       }
@@ -19,8 +19,18 @@ module.exports = plugin => {
     'RepeatYourselfImport',
     async () => {
       try {
-        const line = await importLine()
-        await plugin.nvim.setLine(line + 'hoge')
+        const cword = await plugin.nvim.eval('expand("<cword>")')
+        const buffer = await plugin.nvim.buffer
+        const line = await importLine(cword)
+
+        setTimeout(() => {
+          buffer.insert(line, 0)
+        }, 100)
+
+        if (line === 0) {
+          await plugin.nvim.outWrite(`[RepeatYourself] Not found: ${cword}\n`)
+          return
+        }
       } catch (err) {
         console.error(err)
       }
@@ -28,13 +38,13 @@ module.exports = plugin => {
     { sync: false },
   )
 
-  plugin.registerFunction(
-    'SetLines',
-    () => {
-      return plugin.nvim
-        .setLine('May I offer you an egg in these troubling times')
-        .then(() => console.log('Line should be set'))
+  plugin.registerAutocmd(
+    'BufEnter',
+    async fileName => {
+      await importLine()
+      // await cachedListJson(process.cwd())
+      // await plugin.nvim.buffer.append('BufEnter for a JS File?')
     },
-    { sync: false },
+    { sync: false, pattern: '*.{js,jsx,ts,tsx}', eval: 'expand("<afile>")' },
   )
 }

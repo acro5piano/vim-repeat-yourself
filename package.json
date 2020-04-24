@@ -13,5 +13,9 @@
     "husky": "^4.2.5",
     "lint-staged": "^10.1.7",
     "prettier": "^2.0.5"
+  },
+  "dependencies": {
+    "aigle": "^1.14.1",
+    "execa": "^4.0.0"
   }
 }

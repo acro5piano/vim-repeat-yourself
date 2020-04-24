@@ -2,4 +2,5 @@
 
 nvim +UpdateRemotePlugins \
     +RepeatYourselfMake \
-    +RepeatYourselfImport
+    +RepeatYourselfImport \
+    tests/test-project/index.js
