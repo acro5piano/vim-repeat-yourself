@@ -46,11 +46,7 @@ function getSaveTo(searchPath) {
   return `${dir}/${fileName}`
 }
 
-async function getList(
-  searchPath,
-  fileRegex = /.(js|ts)$/,
-  importRegex = /^import |const.+=.+require/,
-) {
+async function getList(searchPath, fileRegex, importRegex) {
   return Aigle.resolve(execa('git', ['ls-files', searchPath]))
     .then(x => x.stdout.split('\n'))
     .filter(x => fileRegex.test(x))
@@ -65,11 +61,15 @@ async function getList(
     .sortBy((x, y) => x.localeCompare(y))
 }
 
-async function make(searchPath = process.cwd()) {
+async function make(
+  searchPath = process.cwd(),
+  fileRegex = /.(jsx?|tsx?)$/,
+  importRegex = /^import |const.+=.+require/,
+) {
   const fileName = searchPath.replace(/\//g, '__')
   const dir = path.resolve(`${process.env.HOME}/.vim-repeat-yourself`)
   await execa('mkdir', [dir]).catch(() => {})
-  const lines = await getList(searchPath)
+  const lines = await getList(searchPath, fileRegex, importRegex)
   await writeFilePromise(
     getSaveTo(searchPath),
     JSON.stringify(lines, undefined, 2),

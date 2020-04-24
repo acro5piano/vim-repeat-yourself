@@ -6,7 +6,10 @@ module.exports = plugin => {
   plugin.registerCommand(
     'RepeatYourselfMake',
     async () => {
-      await make().catch(() => {
+      await Promise.all([
+        make(process.cwd(), /.(jsx?|tsx?)$/, /^import |const.+=.+require/),
+        // make(process.cwd(), /.php$/, /^use/),
+      ]).catch(() => {
         console.error(err)
       })
     },
