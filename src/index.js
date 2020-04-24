@@ -68,7 +68,7 @@ async function getList(
 async function make(searchPath = process.cwd()) {
   const fileName = searchPath.replace(/\//g, '__')
   const dir = path.resolve(`${process.env.HOME}/.vim-repeat-yourself`)
-  await execa(dir)
+  await execa('mkdir', [dir]).catch(() => {})
   const lines = await getList(searchPath)
   await writeFilePromise(
     getSaveTo(searchPath),
